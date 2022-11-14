@@ -1,2 +1,5 @@
-a = [1,2,3,4,5]
-print(a[-1])
+import time
+def conversionTime(timespec):
+    add_time = time.localtime(int(timespec) / 1000)
+    writeTime = time.strftime('%Y-%m-%d %H:%M:%S', add_time)
+    return writeTime

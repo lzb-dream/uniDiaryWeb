@@ -1,5 +1,10 @@
-class S():
-    def __str__(self):
-        return '罗志宝'
+# class S():
+#     def __str__(self):
+#         return '罗志宝'
+#
+# print(S())
 
-print(S())
+
+# a = 1234
+#
+# print(isinstance(a,int))

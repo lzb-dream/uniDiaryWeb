@@ -39,8 +39,12 @@ class UserManagement(APIView):
         post_data = request.data
         openId = post_data.get('openId')
         nickName = post_data.get('nickName')
+        diaryPassword = post_data.get('diaryPassword')
         updateTime = post_data.get('addTime')
         identify = post_data.get('identify')
+        fileName = openId+str(updateTime)
+        updateTime = time.localtime(int(updateTime) / 1000)
+        updateTime = time.strftime('%Y-%m-%d %H:%M:%S', updateTime)
         print(identify)
         print(openId, nickName, updateTime)
         user = User.objects.filter(openId=openId).first()
@@ -51,24 +55,26 @@ class UserManagement(APIView):
             judge = os.path.exists(f'static/user/{openId}/headPortrait')
             if not judge:
                 os.makedirs(f'static/user/{openId}/headPortrait')
-            file = post_data.get(openId+updateTime)
+            file = post_data.get(fileName)
+            print('文件',file)
             image_houzhui = str(file).split('.')[1]
-            fileName = openId+updateTime+'.'+image_houzhui
+            fileName = fileName+'.'+image_houzhui
             fileName = f'static/user/{openId}/headPortrait/{fileName}'
             print(fileName)
             with open(fileName,mode='wb') as f:
                 for i in file:
                     f.write(i)
-            updateTime = time.localtime(int(updateTime) / 1000)
-            updateTime = time.strftime('%Y-%m-%d %H:%M:%S', updateTime)
             userS = Us(instance=user,data={'headPortrait':f'http://127.0.0.1:8000/{fileName}', 'updateTime':updateTime}, partial=True)
             if userS.is_valid(raise_exception=True):
                 userS.save()
         elif identify == 'nickName':
-            updateTime = time.localtime(int(updateTime) / 1000)
-            updateTime = time.strftime('%Y-%m-%d %H:%M:%S', updateTime)
             print(updateTime)
             userS = Us(instance=user,data={'nickName':nickName,'updateTime':updateTime},partial=True)
+            if userS.is_valid(raise_exception=True):
+                userS.save()
+        elif identify == 'diaryPassword':
+            print(updateTime)
+            userS = Us(instance=user,data={'diaryPassword':diaryPassword,'updateTime':updateTime},partial=True)
             if userS.is_valid(raise_exception=True):
                 userS.save()
         return Response({'msg': 'ok'})

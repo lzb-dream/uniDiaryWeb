@@ -8,8 +8,39 @@
 
 </body>
 <script>
-    function a() {
-        return Promise()
+    function deepCopy(obj) {
+        if (typeof obj !== 'object' || obj ===null){
+            return obj
+        }
+        let result
+        if (obj instanceof Array){
+            result = []
+        }else {
+            result = {}
+        }
+        for (const key in obj) {
+            result[key] = deepCopy(obj[key])
+        }
+        return result
     }
+    a = [1,2,3,4,[1,2]]
+    b = deepCopy(a)
+//    console.log(b)
+ //   console.log(b===a)
+    a.length = 0
+   // console.log(a)
+
+    var x = 1
+    var y = x++
+    console.log(y)
+
+
+
+
+
+
+
+
+
 </script>
 </html>
